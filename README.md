@@ -37,9 +37,21 @@ python scripts/import-statements.py "CAMINHO_DAS_FATURAS" --output private/finan
 
 Ele recupera o cabeçalho PDF quando há bytes inválidos antes dele e exige conciliação exata de cada fatura antes de gravar a base. Os valores esperados das faturas, parcelas da Mary e ajustes de centavos ficam em `private/import-config.json`, também ignorado pelo Git (opção `--config`). Para outros meses ou modelos, revise o extrator e concilie os documentos antes de importar.
 
+### Reconhecer compras nas próximas faturas
+
+Guarde o JSON classificado do mês anterior e importe o mês novo em **outro arquivo**, após adaptar o extrator e conferir os totais das novas faturas. Então execute:
+
+```sh
+node scripts/transfer-classifications.mjs --previous private/finances.json --current private/novo-mes.json --output private/novo-mes-revisado.json --report private/pendencias-novo-mes.json
+```
+
+O arquivo revisado reaproveita nomes, categorias e finalidades apenas quando encontra uma parcela posterior da mesma compra, com a descrição original do banco, conta, final do cartão e valor compatíveis. Os números das parcelas devem avançar conforme os meses transcorridos. Classificações provisórias, correspondências duplicadas e valores divergentes aparecem no relatório de pendências para conferência. Compras sem correspondência permanecem sem identificação. O arquivo anterior não é sobrescrito; importe o revisado no aplicativo depois de conferir as pendências.
+
 ### Critérios de cálculo
 
 Valores em centavos inteiros. Despesas pela competência da fatura, não pelo mês da compra. Pagamentos de faturas anteriores excluídos, evitando dupla contagem. Receitas não informadas permanecem desconhecidas: não são presumidas como zero. Resultado registrado é receitas menos despesas, não saldo bancário.
+
+O saldo informado de uma conta é uma posição sem data confirmada até que ela seja fornecida. Valores a receber são previsões por competência e ficam separados das receitas realizadas; só entram no resultado quando o recebimento for confirmado e registrado como receita. Os dados privados de saldo e recebíveis são preservados na configuração local da importação e incluídos no backup do aplicativo.
 
 Projeção inclui apenas parcelamentos explícitos da competência selecionada. Não inclui novas compras, assinaturas recorrentes, despesas não enviadas ou juros futuros. Para Inter, valores futuros explicitados na fatura ajustam diferenças de centavos; para as demais parcelas, o valor atual é usado como estimativa. Mapfre exige confirmação antes de entrar na projeção. Não confundir soma nominal de parcelas com saldo para quitação antecipada.
 

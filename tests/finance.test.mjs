@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {emptyData,parseMoney,summary,project,addMonths,validateData} from '../public/finance.js';
+import {emptyData,parseMoney,summary,receivablesSummary,project,addMonths,validateData} from '../public/finance.js';
 const row=(extra={})=>({id:'example',description:'Exemplo',amount:10001,type:'expense',account:'manual',category:'A classificar',date:null,month:'2026-10',...extra});
 test('monetary input stays in integer cents',()=>{assert.equal(parseMoney('1250,59'),125059);assert.equal(parseMoney('0.01'),1);assert.equal(parseMoney('12,5'),1250);for(const invalid of ['1.000,50','-1','0','NaN','1e4','12,999'])assert.throws(()=>parseMoney(invalid));});
 test('income and expenses preserve their signs in results',()=>{assert.deepEqual(summary([row(),row({id:'income',type:'income',amount:20000})]),{expenses:10001,income:20000,balance:9999,count:2});});
@@ -9,3 +9,4 @@ test('month arithmetic crosses years correctly',()=>{assert.equal(addMonths('202
 test('backup validation rejects duplicate IDs and invalid amounts',()=>{const d=emptyData();d.transactions=[row()];assert.equal(validateData(d).transactions.length,1);d.transactions.push(row());assert.throws(()=>validateData(d));for(const amount of [-1,0,NaN,1.2,Number.MAX_SAFE_INTEGER]){d.transactions=[row({amount})];assert.throws(()=>validateData(d));}});
 test('backup validation rejects invalid dates, account and installments',()=>{for(const extra of [{date:'2026-02-30'},{account:'missing'},{installment:4,installments:3},{installment:0,installments:3},{month:'2026-13'}]){const d=emptyData();d.transactions=[row(extra)];assert.throws(()=>validateData(d));}});
 test('income is excluded from expense installment projection',()=>{assert.equal(project([row({type:'income',installment:1,installments:12})],'2026-10',1)[0].value,0);});
+test('balance and pending receivables stay separate from realized income',()=>{const d=emptyData();d.cashSnapshot={amount:477590,account:'manual',asOf:null};d.receivables=[{id:'one',name:'Cliente',amount:75000,expectedMonth:'2026-10',expectedDate:null,status:'pending'},{id:'two',name:'Cliente',amount:35000,expectedMonth:'2026-10',expectedDate:'2026-10-18',status:'received'}];const valid=validateData(d);assert.equal(summary(valid.transactions).income,0);assert.deepEqual(receivablesSummary(valid.receivables),{count:1,amount:75000});assert.equal(valid.cashSnapshot.amount,477590);d.receivables[0].expectedDate='2026-11-01';assert.throws(()=>validateData(d));});

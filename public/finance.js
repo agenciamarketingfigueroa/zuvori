@@ -1,8 +1,9 @@
-export const categories=['Publicidade','Casa e reforma','Mercado','Alimentação fora','Transporte','Saúde','Assinaturas e software','Telefone','Impostos e tarifas','Seguros','Empréstimos','A classificar'];
-export const colors=['#638aef','#ac92ef','#55bfa5','#e5ad6e','#dd7c88','#81b5ce','#c2ac76','#959ae5','#a1a9b5','#71a5a2','#bd93a4','#7f8590'];
+export const categories=['Publicidade','Casa e reforma','Mercado','Alimentação fora','Transporte','Saúde','Assinaturas e software','Telefone','Impostos e tarifas','Seguros','Empréstimos','Equipamentos de trabalho','Cursos e formação','Presentes e ocasiões','A classificar'];
+export const colors=['#638aef','#ac92ef','#55bfa5','#e5ad6e','#dd7c88','#81b5ce','#c2ac76','#959ae5','#a1a9b5','#71a5a2','#bd93a4','#7ca3bd','#c29b7f','#cc91a9','#7f8590'];
 export const money=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n/100);
-export const emptyData=()=>({version:1,referenceMonth:'2026-10',incomeComplete:[],cards:[],transactions:[],budgets:{},notes:[]});
+export const emptyData=()=>({version:1,referenceMonth:'2026-10',incomeComplete:[],cards:[],transactions:[],budgets:{},cashSnapshot:null,receivables:[],notes:[]});
 export function summary(rows){const expenses=rows.filter(r=>r.type==='expense').reduce((s,r)=>s+r.amount,0);const income=rows.filter(r=>r.type==='income').reduce((s,r)=>s+r.amount,0);return {expenses,income,balance:income-expenses,count:rows.length};}
+export function receivablesSummary(items){const pending=items.filter(item=>item.status==='pending');return {count:pending.length,amount:pending.reduce((total,item)=>total+item.amount,0)};}
 export function group(rows,key){return Object.entries(rows.reduce((s,r)=>{s[r[key]]=(s[r[key]]||0)+r.amount;return s;},{})).map(([name,value])=>({name,value})).sort((a,b)=>b.value-a.value);}
 export function addMonths(month,n){const [y,m]=month.split('-').map(Number);const date=new Date(Date.UTC(y,m-1+n,1));return date.toISOString().slice(0,7);}
 export function project(rows,month,count=6){return Array.from({length:count},(_,i)=>({month:addMonths(month,i+1),value:rows.filter(r=>r.type==='expense'&&r.month===month&&r.installments&&r.installment+i+1<=r.installments).reduce((s,r)=>s+(r.futureAmount??r.amount),0)}));}
@@ -26,7 +27,17 @@ export function validateData(input){
   }
   if(!Number.isSafeInteger(input.transactions.reduce((total,row)=>total+row.amount,0)))throw Error('Total excede a precisão suportada.');
   for(const [month,limit] of Object.entries(input.budgets)){if(!validMonth(month)||!amount(limit))throw Error('Meta inválida.');}
+  const snapshot=input.cashSnapshot??null;
+  if(snapshot!==null&&(!snapshot||typeof snapshot!=='object'||Array.isArray(snapshot)||!amount(snapshot.amount)||snapshot.account!=null&&!safeString(snapshot.account)||snapshot.asOf!=null&&!validDate(snapshot.asOf)))throw Error('Saldo informado inválido.');
+  const receivables=input.receivables??[];
+  if(!Array.isArray(receivables)||receivables.length>20000)throw Error('Lista de valores a receber inválida.');
+  const receivableIds=new Set();
+  for(const item of receivables){
+    if(!safeString(item.id)||!item.id||receivableIds.has(item.id)||!safeString(item.name)||!item.name||!amount(item.amount)||item.amount===0||!validMonth(item.expectedMonth)||item.expectedDate!=null&&(!validDate(item.expectedDate)||item.expectedDate.slice(0,7)!==item.expectedMonth)||!['pending','received'].includes(item.status))throw Error('Valor a receber inválido.');
+    receivableIds.add(item.id);
+  }
+  if(!Number.isSafeInteger(receivables.reduce((total,item)=>total+item.amount,0)))throw Error('Total a receber excede a precisão suportada.');
   // Project only known fields, keeping imported metadata out of HTML and styles.
-  return {...emptyData(),referenceMonth:input.referenceMonth,incomeComplete:input.incomeComplete,cards:input.cards.map(c=>({...c,color:/^#[0-9a-f]{6}$/i.test(c.color)?c.color:'#949aa4',status:['paid','unknown'].includes(c.status)?c.status:'unknown'})),transactions:input.transactions,budgets:input.budgets,notes:Array.isArray(input.notes)?input.notes.filter(safeString):[]};
+  return {...emptyData(),referenceMonth:input.referenceMonth,incomeComplete:input.incomeComplete,cards:input.cards.map(c=>({...c,color:/^#[0-9a-f]{6}$/i.test(c.color)?c.color:'#949aa4',status:['paid','unknown'].includes(c.status)?c.status:'unknown'})),transactions:input.transactions,budgets:input.budgets,cashSnapshot:snapshot,receivables,notes:Array.isArray(input.notes)?input.notes.filter(safeString):[]};
 }
 export function parseMoney(s){const cleaned=String(s).trim().replace(/\s|R\$/g,'');if(!/^\d+(?:[.,]\d{1,2})?$/.test(cleaned))throw Error('Use um valor como 1250,50, sem separador de milhar.');const [whole,decimal='']=cleaned.replace(',','.').split('.');const value=Number(whole)*100+Number(decimal.padEnd(2,'0'));if(!Number.isSafeInteger(value)||value<=0||value>1e12)throw Error('Informe um valor maior que zero.');return value;}

@@ -1,6 +1,6 @@
 # Validação da primeira versão
 
-- Dez testes automatizados aprovados: centavos, receita/despesa, projeções, virada de ano, backups inválidos e proteção JWT.
+- Onze testes automatizados aprovados: centavos, receita/despesa, recebíveis separados da receita realizada, projeções, virada de ano, backups inválidos e proteção JWT.
 - Os lançamentos dos três PDFs conciliados exatamente com os totais de suas faturas. Documentos originais preservados.
 - Conferência visual de páginas dos PDFs do Inter e Nubank MEI. Dados de identificação e boleto não foram incluídos no JSON do aplicativo.
 - Chrome: cadastro e edição de receita, cálculo do resultado parcial, busca, exclusão do lançamento de teste, meta de despesas, conciliação dos cartões, marcação local de pagamento e alteração do simulador conferidos em uma origem local separada.

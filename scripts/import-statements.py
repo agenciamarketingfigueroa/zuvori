@@ -65,10 +65,10 @@ def run(folder, output, config_path):
     for row in rows:
         correction=config.get('classifications',{}).get(row['id'])
         if correction and correction.get('originalDescription')==row['description']:
-            for key in ('description','originalDescription','category','purpose','review'):
+            for key in ('description','originalDescription','classificationStatus','category','purpose','review'):
                 if key in correction:
                     row[key]=correction[key]
-    result=dict(version=1,referenceMonth='2026-10',incomeComplete=[],cards=cards,transactions=rows,budgets={},notes=['Categorias sugeridas pelo estabelecimento; revise a finalidade pessoal ou profissional.','Mary: competência confirmada; vencimento não informado.','Mapfre: descrição sugere parcela 4/10, mas não foi incluída na projeção sem confirmação.','Pagamentos das faturas anteriores excluídos para evitar dupla contagem.'])
+    result=dict(version=1,referenceMonth='2026-10',incomeComplete=[],cards=cards,transactions=rows,budgets={},cashSnapshot=config.get('cashSnapshot'),receivables=config.get('receivables',[]),notes=['Categorias sugeridas pelo estabelecimento; revise a finalidade pessoal ou profissional.','Mary: competência confirmada; vencimento não informado.','Mapfre: descrição sugere parcela 4/10, mas não foi incluída na projeção sem confirmação.','Pagamentos das faturas anteriores excluídos para evitar dupla contagem.'])
     output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')
     print(json.dumps({'transactions':len(rows),'cards':sum(c['total'] for c in cards),'mary':sum(r['amount'] for r in rows if r['account']=='mary'),'total':sum(r['amount'] for r in rows)},ensure_ascii=True))
