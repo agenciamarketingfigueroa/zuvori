@@ -1,0 +1,10 @@
+private/
+tmp/
+dist/
+node_modules/
+.dev.vars
+.env*
+.wrangler/
+test-results/
+__pycache__/
+*.pdf

@@ -1,0 +1,11 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {emptyData,parseMoney,summary,project,addMonths,validateData} from '../public/finance.js';
+const row=(extra={})=>({id:'example',description:'Exemplo',amount:10001,type:'expense',account:'manual',category:'A classificar',date:null,month:'2026-10',...extra});
+test('monetary input stays in integer cents',()=>{assert.equal(parseMoney('1250,59'),125059);assert.equal(parseMoney('0.01'),1);assert.equal(parseMoney('12,5'),1250);for(const invalid of ['1.000,50','-1','0','NaN','1e4','12,999'])assert.throws(()=>parseMoney(invalid));});
+test('income and expenses preserve their signs in results',()=>{assert.deepEqual(summary([row(),row({id:'income',type:'income',amount:20000})]),{expenses:10001,income:20000,balance:9999,count:2});});
+test('projection excludes last installments and uses future rounding',()=>{const result=project([row({installment:2,installments:3,futureAmount:10000}),row({id:'last',installment:12,installments:12}),row({id:'no-parcel'}),row({id:'other-month',month:'2026-09',installment:1,installments:9})],'2026-10',3);assert.deepEqual(result,[{month:'2026-11',value:10000},{month:'2026-12',value:0},{month:'2027-01',value:0}]);});
+test('month arithmetic crosses years correctly',()=>{assert.equal(addMonths('2026-12',2),'2027-02');assert.equal(addMonths('2026-10',44),'2030-06');});
+test('backup validation rejects duplicate IDs and invalid amounts',()=>{const d=emptyData();d.transactions=[row()];assert.equal(validateData(d).transactions.length,1);d.transactions.push(row());assert.throws(()=>validateData(d));for(const amount of [-1,0,NaN,1.2,Number.MAX_SAFE_INTEGER]){d.transactions=[row({amount})];assert.throws(()=>validateData(d));}});
+test('backup validation rejects invalid dates, account and installments',()=>{for(const extra of [{date:'2026-02-30'},{account:'missing'},{installment:4,installments:3},{installment:0,installments:3},{month:'2026-13'}]){const d=emptyData();d.transactions=[row(extra)];assert.throws(()=>validateData(d));}});
+test('income is excluded from expense installment projection',()=>{assert.equal(project([row({type:'income',installment:1,installments:12})],'2026-10',1)[0].value,0);});

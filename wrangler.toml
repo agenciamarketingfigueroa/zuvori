@@ -1,0 +1,6 @@
+name = "zuvori"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-10-14"
+
+# Set ACCESS_TEAM_DOMAIN and ACCESS_AUD in Cloudflare before deployment.
+# No financial data or credentials belong in this repository.
