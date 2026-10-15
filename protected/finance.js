@@ -1,7 +1,7 @@
 export const categories=['Publicidade','Casa e reforma','Mercado','Alimentação fora','Transporte','Saúde','Assinaturas e software','Telefone','Impostos e tarifas','Seguros','Empréstimos','Equipamentos de trabalho','Cursos e formação','Presentes e ocasiões','A classificar'];
 export const colors=['#638aef','#ac92ef','#55bfa5','#e5ad6e','#dd7c88','#81b5ce','#c2ac76','#959ae5','#a1a9b5','#71a5a2','#bd93a4','#7ca3bd','#c29b7f','#cc91a9','#7f8590'];
 export const money=n=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n/100);
-export const emptyData=()=>({version:1,referenceMonth:'2026-10',incomeComplete:[],cards:[],transactions:[],budgets:{},cashSnapshot:null,receivables:[],notes:[]});
+export const emptyData=()=>{const now=new Date();return {version:1,referenceMonth:`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`,incomeComplete:[],cards:[],transactions:[],budgets:{},cashSnapshot:null,receivables:[],notes:[]};};
 export function summary(rows){const expenses=rows.filter(r=>r.type==='expense').reduce((s,r)=>s+r.amount,0);const income=rows.filter(r=>r.type==='income').reduce((s,r)=>s+r.amount,0);return {expenses,income,balance:income-expenses,count:rows.length};}
 export function receivablesSummary(items){const pending=items.filter(item=>item.status==='pending');return {count:pending.length,amount:pending.reduce((total,item)=>total+item.amount,0)};}
 export function group(rows,key){return Object.entries(rows.reduce((s,r)=>{s[r[key]]=(s[r[key]]||0)+r.amount;return s;},{})).map(([name,value])=>({name,value})).sort((a,b)=>b.value-a.value);}

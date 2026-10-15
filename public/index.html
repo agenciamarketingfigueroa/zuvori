@@ -1,31 +1,58 @@
 <!doctype html>
-<html lang="pt-BR" data-theme="dark">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101113"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Zuvori. Clareza para o seu dinheiro."><title>Zuvori — Seu dinheiro, em perspectiva.</title><link rel="icon" href="/assets/symbol.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"><script src="/app.js" type="module"></script></head>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17181b">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Zuvori. Clareza para o seu dinheiro.">
+  <title>Entrar — Zuvori</title>
+  <link rel="icon" href="/assets/symbol.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/login.css">
+  <script src="/login.js" type="module"></script>
+</head>
 <body>
-<a class="skip" href="#main">Pular para o conteúdo</a>
-<aside class="sidebar" id="sidebar">
- <a class="brand" href="#overview" aria-label="Zuvori, visão geral">zuvori<span>.</span></a><span class="brand-caption">MENOS RUÍDO. MAIS CLAREZA.</span>
- <div class="workspace"><div class="workspace-icon">z.</div><div><strong>Meu financeiro</strong><small>Pessoal & negócios</small></div><span class="workspace-dot"></span></div>
- <p class="nav-label">SEU ESPAÇO</p>
- <nav aria-label="Navegação principal">
-  <a href="#overview" data-nav="overview"><span data-icon="grid"></span>Visão geral</a>
-  <a href="#transactions" data-nav="transactions"><span data-icon="arrows"></span>Lançamentos<span id="transaction-count" class="nav-count"></span></a>
-  <a href="#cards" data-nav="cards"><span data-icon="card"></span>Cartões & faturas</a>
-  <a href="#categories" data-nav="categories"><span data-icon="donut"></span>Categorias</a>
-  <a href="#planning" data-nav="planning"><span data-icon="calendar"></span>Planejamento</a>
-  <a href="#insights" data-nav="insights"><span data-icon="spark"></span>Insights<span class="new-dot"></span></a>
- </nav>
- <div class="sidebar-bottom"><div class="local-note"><span data-icon="shield"></span><div><strong id="session-label">Espaço local</strong><small>Seus dados, sob seu controle.</small></div></div><a href="#settings" data-nav="settings"><span data-icon="settings"></span>Dados & preferências</a><div class="profile"><span class="avatar">EU</span><div><strong>Meu espaço</strong><small>Zuvori · versão inicial</small></div><span class="tiny">01</span></div></div>
-</aside>
-<div class="workspace-main">
- <header class="topbar"><div class="breadcrumb"><button class="icon-button mobile-menu" id="menu-button" aria-label="Abrir menu" aria-expanded="false"><span data-icon="menu"></span></button><span>Meu financeiro</span><span class="slash">/</span><strong id="breadcrumb">Visão geral</strong></div><div class="top-actions"><span class="local-badge"><i></i><span id="mode-label">Uso pessoal</span></span><button class="icon-button" id="privacy-button" aria-label="Ocultar valores" title="Ocultar valores"><span data-icon="eye"></span></button><button class="icon-button" id="theme-button" aria-label="Alternar tema claro e escuro" title="Alternar tema"><span data-icon="sun"></span></button><span class="avatar small">EU</span></div></header>
- <main id="main" tabindex="-1">
-  <div class="page-heading"><div><span class="eyebrow" id="eyebrow">CADA ESCOLHA CONTA</span><h1 id="page-title">Seu dinheiro, em perspectiva<span>.</span></h1><p id="page-subtitle">Tudo no lugar. Mais espaço para o que importa.</p></div><div class="heading-actions"><label class="month-select"><span data-icon="calendar"></span><select id="month" aria-label="Competência"></select></label><button class="button primary" id="add-button"><span data-icon="plus"></span>Novo lançamento</button></div></div>
-  <div id="content"></div>
-  <footer class="footer"><span class="footer-brand">zuvori.</span><span>Clareza para decidir. Liberdade para seguir.</span><span id="footer-status">Dados neste navegador</span></footer>
- </main>
-</div>
-<dialog id="entry-dialog"><form id="entry-form"><div class="dialog-heading"><div><span class="eyebrow">MAIS CLAREZA, UM REGISTRO POR VEZ</span><h2 id="entry-title">Novo lançamento</h2></div><button type="button" class="icon-button" data-close aria-label="Fechar">×</button></div><input type="hidden" name="id"><div class="form-grid"><label>Tipo<select name="type"><option value="expense">Despesa</option><option value="income">Receita</option></select></label><label>Valor (R$)<input name="amount" inputmode="decimal" placeholder="0,00" required></label><label class="full">Descrição<input name="description" maxlength="160" placeholder="Ex.: pagamento de cliente" required></label><label>Data<input type="date" name="date"></label><label>Competência<input type="month" name="month" required></label><label>Conta<select name="account"></select></label><label>Categoria<select name="category"></select></label><label>Parcela atual<input name="installment" type="number" min="1" max="600" placeholder="Opcional"></label><label>Total de parcelas<input name="installments" type="number" min="1" max="600" placeholder="Opcional"></label></div><p class="form-help" id="entry-help">O valor é o valor desta parcela. Parcelas futuras aparecem na projeção.</p><p class="error" id="form-error" role="alert"></p><div class="dialog-actions"><button class="button danger" type="button" id="delete-entry" hidden>Excluir</button><button class="button" type="button" data-close>Cancelar</button><button class="button primary" type="submit">Salvar lançamento</button></div></form></dialog>
-<dialog id="confirm-dialog"><h2 id="confirm-title">Confirmar ação</h2><p id="confirm-message"></p><div class="dialog-actions"><button class="button" id="confirm-cancel">Cancelar</button><button class="button primary" id="confirm-ok">Confirmar</button></div></dialog>
-<input id="import-file" type="file" accept=".json,application/json" hidden><div id="toast" role="status" aria-live="polite"></div>
-</body></html>
+  <a class="skip-link" href="#login-title">Pular para o acesso</a>
+  <div class="login-layout">
+    <section class="story" aria-label="Zuvori">
+      <div class="story-top"><span class="story-mark">zuvori<span>.</span></span><span class="story-tag">SEU ESPAÇO FINANCEIRO</span></div>
+      <div class="story-content">
+        <div class="story-art" aria-hidden="true"><span class="art-ring ring-one"></span><span class="art-ring ring-two"></span><span class="art-core">z<span>.</span></span></div>
+        <p class="story-kicker">CADA ESCOLHA CONTA</p>
+        <h2>Clareza para decidir.<br>Liberdade para seguir.</h2>
+        <p class="story-copy">Seu dinheiro em perspectiva, com tudo o que importa em um só lugar.</p>
+      </div>
+      <div class="story-bottom"><span>Uma visão mais simples da sua vida financeira.</span><span>01 / 01</span></div>
+    </section>
+
+    <main class="login-main">
+      <div class="mobile-brand"><img src="/assets/symbol.svg" alt="" width="40" height="40"><span>zuvori<span>.</span></span></div>
+      <div class="login-content">
+        <div class="welcome-icon" aria-hidden="true"><img src="/assets/symbol.svg" alt="" width="28" height="28"></div>
+        <p class="eyebrow">BEM-VINDO DE VOLTA</p>
+        <h1 id="login-title">Acesse seu espaço<span>.</span></h1>
+        <p class="intro">Entre para acompanhar seu dinheiro com mais clareza.</p>
+
+        <form id="login-form" autocomplete="off">
+          <label for="username">Usuário</label>
+          <input id="username" name="username" type="text" autocomplete="off" placeholder="Seu usuário" required>
+
+          <div class="password-label"><label for="password">Senha</label></div>
+          <div class="password-field">
+            <input id="password" name="password" type="password" autocomplete="off" placeholder="Digite sua senha" required>
+            <button id="toggle-password" type="button" aria-label="Mostrar senha" aria-pressed="false">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-5 9.5-5 9.5 5 9.5 5-3.5 5-9.5 5-9.5-5-9.5-5Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+            </button>
+          </div>
+
+          <button class="submit-button" type="submit">Entrar <span aria-hidden="true">→</span></button>
+          <p id="login-status" class="login-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <p class="preview-note">Acesso privado ao seu espaço financeiro.</p>
+      </div>
+      <footer class="login-footer"><span>© Zuvori</span><span>Mais controle. Menos ruído.</span></footer>
+    </main>
+  </div>
+</body>
+</html>

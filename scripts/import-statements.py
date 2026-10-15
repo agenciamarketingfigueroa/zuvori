@@ -74,4 +74,4 @@ def run(folder, output, config_path):
     print(json.dumps({'transactions':len(rows),'cards':sum(c['total'] for c in cards),'mary':sum(r['amount'] for r in rows if r['account']=='mary'),'total':sum(r['amount'] for r in rows)},ensure_ascii=True))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(); p.add_argument('folder',type=Path); p.add_argument('--output',type=Path,default=Path('private/finances.json')); p.add_argument('--config',type=Path,default=Path('private/import-config.json')); args=p.parse_args(); run(args.folder,args.output,args.config)
+    p=argparse.ArgumentParser(); p.add_argument('folder',type=Path); p.add_argument('--output',type=Path,default=Path('private/clients/felipe/data/finances.json')); p.add_argument('--config',type=Path,default=Path('private/clients/felipe/sources/import-config.json')); args=p.parse_args(); run(args.folder,args.output,args.config)

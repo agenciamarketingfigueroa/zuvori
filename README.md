@@ -10,9 +10,35 @@ Com Node.js 22 ou mais recente:
 npm run dev
 ```
 
-Abra **http://127.0.0.1:4173**. No Windows, também é possível executar `iniciar-zuvori.ps1`; ele procura Node no PATH ou no runtime local do Codex. O servidor escuta somente no próprio computador.
+Abra **http://127.0.0.1:4173** e entre com a credencial pessoal configurada. O painel em `/app.html`, seus scripts e a base financeira do cliente só são servidos depois do login. A sessão dura até oito horas ou até clicar em **Sair**. No Windows, `iniciar-zuvori.ps1` procura Node no PATH ou no runtime local do Codex. O servidor escuta somente no próprio computador e não inicia sem ao menos um cliente com `auth.json`.
 
-Na primeira abertura, o servidor de desenvolvimento disponibiliza `private/finances.json`, se existir, e o app importa o arquivo para o navegador. Nas próximas aberturas, prevalecem as alterações em localStorage. Para carregar um arquivo atualizado, use **Dados & preferências → Importar arquivo**. A importação substitui a base atual mediante confirmação, não faz mesclagem automática.
+### Prévia pelo Go Live do VS Code
+
+1. Em **Terminal → Run Task**, inicie **Zuvori: servidor protegido** e deixe esse terminal aberto.
+2. Clique em **Go Live**. Abra **http://127.0.0.1:5500/**.
+
+As configurações em `.vscode/settings.json` encaminham o Go Live para o servidor protegido na porta 4173. A raiz está limitada a `public/`; os arquivos do painel ficam em `protected/`. Se o servidor protegido estiver parado, o Go Live não abre o painel. Não remova o proxy nem mude a raiz para a pasta do repositório ao usar dados pessoais.
+
+Na primeira abertura, o servidor de desenvolvimento disponibiliza `private/clients/<cliente>/data/finances.json`, se existir, e o app importa o arquivo para o navegador. Nas próximas aberturas, prevalecem as alterações no armazenamento local daquele cliente. Para carregar um arquivo atualizado, use **Dados & preferências → Importar arquivo**. A importação substitui a base atual mediante confirmação, não faz mesclagem automática.
+
+## Pastas dos clientes
+
+```text
+private/clients/
+  felipe/
+    auth.json                 # hash da credencial local
+    data/finances.json        # base inicial
+    sources/                 # configuração e materiais de origem
+    reports/                 # revisões, conferências e QA
+  delliz/
+    data/                    # vazia por enquanto
+    sources/
+    reports/
+```
+
+A pasta da Delliz está preparada, vazia e **sem credencial**; por enquanto ela não consegue entrar. Quando a credencial dela for configurada em `private/clients/delliz/auth.json`, o servidor associará a sessão apenas à pasta `delliz`. A base do Felipe não é usada como exemplo para ela. O aplicativo usa chaves diferentes por cliente para evitar mistura acidental na interface, inclusive no mesmo navegador. Dados antigos do navegador são migrados somente para Felipe. **O armazenamento do mesmo perfil de navegador não é uma barreira de segurança entre clientes**: para testes por pessoas diferentes no mesmo computador, use perfis de navegador separados.
+
+Backups exportados levam o nome do cliente. A importação rejeita um backup identificado como outro cliente; backups antigos sem identificação só são aceitos na conta Felipe. Downloads ainda vão para a pasta configurada no navegador: guarde cada arquivo baixado em `private/clients/<cliente>/reports/` ou `data/`, conforme o caso. Os cálculos gerais usam os lançamentos de cada cliente; indicadores específicos da realidade da Delliz serão definidos quando ela fornecer os dados.
 
 ## O que está pronto
 
@@ -27,24 +53,24 @@ Na primeira abertura, o servidor de desenvolvimento disponibiliza `private/finan
 
 ## Dados financeiros
 
-`private/`, `tmp/`, os PDFs, backups e imagens de QA são locais e ignorados pelo Git. O build copia apenas `public/`. Não coloque documentos ou backups nessa pasta.
+`private/`, `tmp/`, os PDFs, backups e imagens de QA são locais e ignorados pelo Git. Cada credencial fica em `private/clients/<cliente>/auth.json` como hash com salt; usuários e senhas não estão no código. O build copia `public/` e `protected/`, sem dados financeiros ou credenciais. Não coloque documentos ou backups nessas pastas públicas do build.
 
-Os dados são armazenados no navegador sem criptografia e **não sincronizam entre dispositivos**. Esta versão local não possui autenticação. A proteção da futura hospedagem é descrita em [docs/cloudflare.md](docs/cloudflare.md). Ocultar valores só desfoca a interface.
+O login protege a prévia servida pelo servidor local. Os dados editados ainda são armazenados no `localStorage` do navegador sem criptografia e **não sincronizam entre dispositivos**; quem tem acesso ao computador, ao perfil do navegador ou aos arquivos locais pode lê-los fora do aplicativo. A proteção da futura hospedagem é descrita em [docs/cloudflare.md](docs/cloudflare.md). Ocultar valores só desfoca a interface.
 
 O extrator utilizado nesta primeira importação é específico aos modelos de fatura fornecidos. Precisa de Python com `pdfplumber`:
 
 ```sh
-python scripts/import-statements.py "CAMINHO_DAS_FATURAS" --output private/finances.json
+python scripts/import-statements.py "CAMINHO_DAS_FATURAS" --output private/clients/felipe/data/finances.json
 ```
 
-Ele recupera o cabeçalho PDF quando há bytes inválidos antes dele e exige conciliação exata de cada fatura antes de gravar a base. Os valores esperados das faturas, parcelas da Mary e ajustes de centavos ficam em `private/import-config.json`, também ignorado pelo Git (opção `--config`). Para outros meses ou modelos, revise o extrator e concilie os documentos antes de importar.
+Ele recupera o cabeçalho PDF quando há bytes inválidos antes dele e exige conciliação exata de cada fatura antes de gravar a base. Os valores esperados das faturas, parcelas da Mary e ajustes de centavos ficam em `private/clients/felipe/sources/import-config.json`, também ignorado pelo Git (opção `--config`). Este extrator é específico dos documentos do Felipe; para a Delliz ou outros modelos, revise o extrator e concilie os documentos antes de importar.
 
 ### Reconhecer compras nas próximas faturas
 
 Guarde o JSON classificado do mês anterior e importe o mês novo em **outro arquivo**, após adaptar o extrator e conferir os totais das novas faturas. Então execute:
 
 ```sh
-node scripts/transfer-classifications.mjs --previous private/finances.json --current private/novo-mes.json --output private/novo-mes-revisado.json --report private/pendencias-novo-mes.json
+node scripts/transfer-classifications.mjs --previous private/clients/felipe/data/finances.json --current private/clients/felipe/data/novo-mes.json --output private/clients/felipe/data/novo-mes-revisado.json --report private/clients/felipe/reports/pendencias-novo-mes.json
 ```
 
 O arquivo revisado reaproveita nomes, categorias e finalidades apenas quando encontra uma parcela posterior da mesma compra, com a descrição original do banco, conta, final do cartão e valor compatíveis. Os números das parcelas devem avançar conforme os meses transcorridos. Classificações provisórias, correspondências duplicadas e valores divergentes aparecem no relatório de pendências para conferência. Compras sem correspondência permanecem sem identificação. O arquivo anterior não é sobrescrito; importe o revisado no aplicativo depois de conferir as pendências.
@@ -68,7 +94,7 @@ npm test
 npm run build
 ```
 
-Os testes cobrem centavos, projeções, virada de ano, validação de backups e bloqueio/validação de JWT na futura hospedagem. `dist/` contém apenas o aplicativo estático. Para Cloudflare Pages, mantenha também `functions/` na raiz do repositório para compilar o middleware de autenticação.
+Os testes cobrem centavos, projeções, virada de ano, validação de backups, autenticação local e bloqueio/validação de JWT na futura hospedagem. `dist/` contém apenas o aplicativo estático. Para Cloudflare Pages, mantenha também `functions/` na raiz do repositório para compilar o middleware de autenticação.
 
 ## Marca
 

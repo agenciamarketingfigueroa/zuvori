@@ -1,6 +1,10 @@
 # Publicação futura com acesso privado
 
-Nenhum projeto foi criado nem publicado nesta etapa, conforme a opção por uso interno. Este guia prepara a próxima etapa; o login ainda não está ativo.
+Nenhum projeto foi criado nem publicado nesta etapa, conforme a opção por uso interno. Este guia prepara a próxima etapa; o login com usuário e senha está ativo **somente no servidor local**.
+
+A página inicial em `/` autentica no servidor local. O painel em `/app.html`, scripts e JSON de teste exigem uma sessão válida. A credencial local não foi enviada à Cloudflare e não está no build. A publicação ainda exige configurar uma estratégia de autenticação própria na hospedagem.
+
+Cloudflare Access pode proteger **todas** as rotas hospedadas, mas mostrará a tela de login dele antes da Zuvori. Para preservar este formulário de usuário e senha na hospedagem, será preciso portar a autenticação local para Pages Functions/Workers e usar armazenamento de sessão apropriado. Esse backend hospedado ainda não está implementado; o middleware atual exige Access e falha fechado sem a configuração dele.
 
 1. Criar um projeto **Cloudflare Pages** conectado ao repositório GitHub. Usar `npm run build`, diretório de saída `dist` e raiz do projeto atual. As Functions em `functions/` precisam ser compiladas junto; não fazer upload só dos arquivos estáticos para uma hospedagem desprotegida.
 2. Definir um domínio ou subdomínio e criar uma aplicação **Cloudflare Access** para todo o hostname. Autorizar somente o e-mail desejado, com código de uso único ou provedor de identidade. Não usar política de bypass.

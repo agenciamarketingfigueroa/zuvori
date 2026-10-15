@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {emptyData,parseMoney,summary,receivablesSummary,project,addMonths,validateData} from '../public/finance.js';
+import {emptyData,parseMoney,summary,receivablesSummary,project,addMonths,validateData} from '../protected/finance.js';
 const row=(extra={})=>({id:'example',description:'Exemplo',amount:10001,type:'expense',account:'manual',category:'A classificar',date:null,month:'2026-10',...extra});
 test('monetary input stays in integer cents',()=>{assert.equal(parseMoney('1250,59'),125059);assert.equal(parseMoney('0.01'),1);assert.equal(parseMoney('12,5'),1250);for(const invalid of ['1.000,50','-1','0','NaN','1e4','12,999'])assert.throws(()=>parseMoney(invalid));});
 test('income and expenses preserve their signs in results',()=>{assert.deepEqual(summary([row(),row({id:'income',type:'income',amount:20000})]),{expenses:10001,income:20000,balance:9999,count:2});});

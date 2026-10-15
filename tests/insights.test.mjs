@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {spendingIndicators,installmentInsights,savingScenario} from '../public/insights.js';
+import {spendingIndicators,installmentInsights,savingScenario} from '../protected/insights.js';
 
 const row=(extra={})=>({id:'example',description:'Exemplo',amount:10000,type:'expense',month:'2026-12',category:'Equipamentos de trabalho',...extra});
 
