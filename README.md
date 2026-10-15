@@ -19,6 +19,8 @@ Na primeira abertura, o servidor de desenvolvimento disponibiliza `private/finan
 - Visão geral, lançamentos com busca e filtros, cartões, categorias, planejamento e insights.
 - Receitas e despesas editáveis, competência separada da data da compra, parcelas e categorias revisáveis.
 - Gráficos de categorias, contas, composição das despesas e projeção de parcelas.
+- Indicadores de assinaturas e software, combustível estimado, alimentação fora, mercado, outros transportes e publicidade; cada bloco abre os lançamentos que compõem o valor.
+- Plano para reduzir compras parceladas: compromisso atual, redução projetada, primeiro mês livre das compras já lançadas e simulação de reserva para comprar à vista.
 - Meta mensal, simulação de redução em categorias selecionadas e confirmação local de pagamento.
 - Exportação e importação JSON, exportação CSV dos filtros ativos, tema persistente e ocultação visual dos valores.
 - Layout responsivo, navegação por teclado, estados vazios e fontes de cada lançamento.
@@ -54,6 +56,8 @@ Valores em centavos inteiros. Despesas pela competência da fatura, não pelo m�
 O saldo informado de uma conta é uma posição sem data confirmada até que ela seja fornecida. Valores a receber são previsões por competência e ficam separados das receitas realizadas; só entram no resultado quando o recebimento for confirmado e registrado como receita. Os dados privados de saldo e recebíveis são preservados na configuração local da importação e incluídos no backup do aplicativo.
 
 Projeção inclui apenas parcelamentos explícitos da competência selecionada. Não inclui novas compras, assinaturas recorrentes, despesas não enviadas ou juros futuros. Para Inter, valores futuros explicitados na fatura ajustam diferenças de centavos; para as demais parcelas, o valor atual é usado como estimativa. Mapfre exige confirmação antes de entrar na projeção. Não confundir soma nominal de parcelas com saldo para quitação antecipada.
+
+O painel de compras parceladas separa parcelas de empréstimos e mostra apenas compras com parcelamento informado. O simulador usa reduções escolhidas nas despesas sem parcelas de alimentação fora, assinaturas e combustível; o prazo de reserva usa somente essas reduções. O potencial de seis meses soma esse cenário com o espaço que cada parcela deixaria de ocupar, comparado ao mês atual, sem presumir receitas ou caixa disponível. Combustível é estimado por descrições de postos e pode incluir outros produtos. “Assinaturas e software” representa cobranças no mês; a periodicidade de cada serviço ainda deve ser confirmada.
 
 Categorias são sugestões pelo estabelecimento, não informação oficial do banco. Não se assume que todo gasto num cartão MEI seja profissional. Os limites refletem a emissão da fatura.
 
