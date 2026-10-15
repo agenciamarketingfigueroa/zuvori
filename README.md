@@ -4,7 +4,13 @@ Aplicativo financeiro pessoal em HTML, CSS e JavaScript. Identidade neutra, tema
 
 ## Rodar localmente
 
-Com Node.js 22 ou mais recente:
+Com Node.js 22 ou mais recente, configure uma credencial local uma vez (substitua `felipe` pelo identificador do cliente):
+
+```sh
+node scripts/setup-auth.mjs felipe
+```
+
+Quando o script mostrar o prompt no terminal, digite uma linha JSON como `{"username":"seu-usuario","password":"sua-senha"}` e pressione Enter. A entrada fica oculta. A credencial fica em `private/`, que não é incluída no Git. Depois, inicie o servidor:
 
 ```sh
 npm run dev
@@ -14,7 +20,7 @@ Abra **http://127.0.0.1:4173** e entre com a credencial pessoal configurada. O p
 
 ### Prévia pelo Go Live do VS Code
 
-1. Em **Terminal → Run Task**, inicie **Zuvori: servidor protegido** e deixe esse terminal aberto.
+1. Em **Terminal → Run Task**, inicie **Zuvori: servidor protegido** e deixe esse terminal aberto. No macOS e Linux, a tarefa usa `npm run dev`; no Windows, usa `iniciar-zuvori.ps1`.
 2. Clique em **Go Live**. Abra **http://127.0.0.1:5500/**.
 
 As configurações em `.vscode/settings.json` encaminham o Go Live para o servidor protegido na porta 4173. A raiz está limitada a `public/`; os arquivos do painel ficam em `protected/`. Se o servidor protegido estiver parado, o Go Live não abre o painel. Não remova o proxy nem mude a raiz para a pasta do repositório ao usar dados pessoais.

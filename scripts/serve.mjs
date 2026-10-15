@@ -20,7 +20,12 @@ const json = (res, status, value, extra = {}) => send(res, status, JSON.stringif
 const cookieFor = (value, maxAge) => `${sessionName}=${value}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${maxAge}`;
 
 export async function loadClients(root = clientsRoot) {
-  const entries = await readdir(root, { withFileTypes: true });
+  let entries;
+  try { entries = await readdir(root, { withFileTypes: true }); }
+  catch (error) {
+    if (error.code === 'ENOENT') throw Error('Nenhum cliente com credencial configurada em private/clients/. Execute node scripts/setup-auth.mjs <cliente> para criar uma credencial local.');
+    throw error;
+  }
   const clients = [];
   for (const entry of entries) {
     if (!entry.isDirectory() || !/^[a-z0-9-]+$/.test(entry.name)) continue;
@@ -30,7 +35,7 @@ export async function loadClients(root = clientsRoot) {
     catch (error) { if (error.code === 'ENOENT') continue; throw error; }
     clients.push({ id: entry.name, credential, financeFile: new URL('data/finances.json', folder) });
   }
-  if (!clients.length) throw Error('Nenhum cliente com credencial configurada em private/clients/.');
+  if (!clients.length) throw Error('Nenhum cliente com credencial configurada em private/clients/. Execute node scripts/setup-auth.mjs <cliente> para criar uma credencial local.');
   return clients;
 }
 

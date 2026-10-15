@@ -4,6 +4,7 @@ import { createCredentialRecord } from './auth.mjs';
 const clientId = process.argv[2];
 if (!/^[a-z0-9-]+$/.test(clientId || '')) throw Error('Informe o identificador do cliente, por exemplo: node scripts/setup-auth.mjs delliz');
 const folder = new URL(`../private/clients/${clientId}/`, import.meta.url);
+process.stdout.write('Digite uma linha JSON com username e password, depois pressione Enter. A entrada ficará oculta no terminal.\n');
 const line = await new Promise((resolve, reject) => {
   let value = '';
   process.stdin.setEncoding('utf8');
