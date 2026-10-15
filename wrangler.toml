@@ -1,6 +1,20 @@
-name = "zuvori"
-pages_build_output_dir = "dist"
-compatibility_date = "2026-10-14"
+name = "zuvori-private"
+main = "worker/index.js"
+compatibility_date = "2026-10-15"
 
-# Set ACCESS_TEAM_DOMAIN and ACCESS_AUD in Cloudflare before deployment.
-# No financial data or credentials belong in this repository.
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+run_worker_first = true
+
+[[kv_namespaces]]
+binding = "ZUVORI_DATA"
+id = "06e77b745c634a2690cba1beed2232b4"
+
+[[ratelimits]]
+name = "LOGIN_RATE"
+namespace_id = "1701"
+
+[ratelimits.simple]
+limit = 5
+period = 60

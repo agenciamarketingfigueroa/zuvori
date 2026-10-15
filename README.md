@@ -57,6 +57,10 @@ Backups exportados levam o nome do cliente. A importação rejeita um backup ide
 - Exportação e importação JSON, exportação CSV dos filtros ativos, tema persistente e ocultação visual dos valores.
 - Layout responsivo, navegação por teclado, estados vazios e fontes de cada lançamento.
 
+## Acesso remoto protegido
+
+O Worker com login da Zuvori e armazenamento privado no Cloudflare KV está preparado, mas ainda não foi implantado. A publicação e a troca do domínio dependem de configurar a conta Cloudflare, uma nova senha forte e revisar a cópia da análise. Consulte [docs/cloudflare-worker.md](docs/cloudflare-worker.md). Os dados enviados ao KV ficam fora do repositório; a versão remota é somente leitura.
+
 ## Dados financeiros
 
 `private/`, `tmp/`, os PDFs, backups e imagens de QA são locais e ignorados pelo Git. Cada credencial fica em `private/clients/<cliente>/auth.json` como hash com salt; usuários e senhas não estão no código. O build copia `public/` e `protected/`, sem dados financeiros ou credenciais. Não coloque documentos ou backups nessas pastas públicas do build.

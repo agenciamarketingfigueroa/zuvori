@@ -12,6 +12,30 @@
       },
       "problemMatcher": [],
       "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Zuvori: configurar login na Cloudflare",
+      "type": "shell",
+      "command": "node",
+      "args": ["scripts/setup-cloud-auth.mjs", "felipe"],
+      "windows": {
+        "command": "powershell",
+        "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\scripts\\configurar-login-cloud.ps1", "felipe"]
+      },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Zuvori: preparar dados para Cloudflare",
+      "type": "shell",
+      "command": "node",
+      "args": ["scripts/prepare-cloud-data.mjs", "felipe"],
+      "windows": {
+        "command": "powershell",
+        "args": ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}\\scripts\\preparar-dados-cloud.ps1", "felipe"]
+      },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
     }
   ]
 }

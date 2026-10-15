@@ -1,5 +1,7 @@
 # Publicação futura com acesso privado
 
+O plano atual para preservar o login visual da Zuvori e consultar os dados em outros dispositivos está em [cloudflare-worker.md](cloudflare-worker.md). O restante desta página descreve a alternativa com Cloudflare Access e não publica os dados do painel.
+
 Nenhum projeto foi criado nem publicado nesta etapa, conforme a opção por uso interno. Este guia prepara a próxima etapa; o login com usuário e senha está ativo **somente no servidor local**.
 
 A página inicial em `/` autentica no servidor local. O painel em `/app.html`, scripts e JSON de teste exigem uma sessão válida. A credencial local não foi enviada à Cloudflare e não está no build. A publicação ainda exige configurar uma estratégia de autenticação própria na hospedagem.
