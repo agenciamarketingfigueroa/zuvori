@@ -104,7 +104,7 @@ npm test
 npm run build
 ```
 
-Os testes cobrem centavos, projeções, virada de ano, validação de backups e autenticação. `dist/` contém apenas o aplicativo estático. O Worker em `worker/` aplica a proteção no domínio publicado; `wrangler.toml` registra os domínios e bindings necessários.
+Os testes cobrem centavos, projeções, virada de ano, validação de backups e autenticação. `dist/` contém apenas o aplicativo estático. O Worker em `worker/` aplica a proteção no domínio publicado; `wrangler.toml` registra os bindings e o endereço `workers.dev`. Os domínios personalizados são gerenciados no painel da Cloudflare.
 
 ## Marca
 
