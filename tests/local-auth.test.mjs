@@ -30,6 +30,8 @@ test('local preview protects app files and financial data with a server session'
     assert.equal((await request('/app.html')).status, 303);
     assert.equal((await request('/app.js')).status, 401);
     assert.equal((await request('/finance.js')).status, 401);
+    assert.equal((await request('/payoff.js')).status, 401);
+    assert.equal((await request('/payoff-view.js')).status, 401);
     assert.equal((await request('/auth/session')).status, 401);
     assert.equal((await request('/__local-data')).status, 401);
     assert.equal((await request('/private/finances.json')).status, 404);
@@ -45,6 +47,7 @@ test('local preview protects app files and financial data with a server session'
     const cookieHeader = cookie.split(';')[0];
     assert.equal((await request('/app.html', { headers: { Cookie: cookieHeader } })).status, 200);
     assert.equal((await request('/app.js', { headers: { Cookie: cookieHeader } })).status, 200);
+    assert.equal((await request('/payoff-view.js', { headers: { Cookie: cookieHeader } })).status, 200);
     assert.deepEqual(await (await request('/auth/session', { headers: { Cookie: cookieHeader } })).json(), { client: 'felipe' });
     assert.deepEqual(await (await request('/__local-data', { headers: { Cookie: cookieHeader } })).json(), { private: 'felipe-only' });
     const other = await login('Outra Pessoa', 'other-test-password');

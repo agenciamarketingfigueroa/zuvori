@@ -21,6 +21,7 @@ const data = {
   budgets: input.budgets,
   cashSnapshot: input.cashSnapshot && pick(input.cashSnapshot, ['amount', 'account', 'asOf']),
   receivables: input.receivables.map(item => pick(item, ['id', 'name', 'amount', 'expectedMonth', 'expectedDate', 'status'])),
+  debtPlan: input.debtPlan,
   notes: []
 };
 validateData(data);

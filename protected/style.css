@@ -19,3 +19,42 @@
 .top-actions .logout-button{width:auto;min-width:38px;padding:0 8px;font-size:12px;font-weight:600}
 .remote-readonly #add-button,.remote-readonly .table-edit,.remote-readonly [data-paid],.remote-readonly .check-line,.remote-readonly .budget-form,.remote-readonly .empty [data-action="add"],.remote-readonly .empty [data-action="import"]{display:none!important}
 .cash-panel{margin-bottom:20px}.cash-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.cash-total{padding:18px 20px;border:1px solid var(--line);border-radius:8px;background:var(--panel-alt);min-width:0}.cash-total>span,.cash-total small{display:block;color:var(--muted);font-size:12px;line-height:1.5}.cash-total>strong{display:block;font-size:clamp(23px,2.2vw,32px);font-weight:560;letter-spacing:-.7px;margin:8px 0}.cash-total small{font-size:11px}.receivable-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:25px;margin-top:13px}.receivable-row{display:flex;align-items:center;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding:11px 0;min-width:0}.receivable-row>div{min-width:0}.receivable-row strong{font-size:13px;font-weight:550}.receivable-row small{display:block;font-size:11px;color:var(--muted);margin-top:5px}.receivable-row>strong{white-space:nowrap}@media(max-width:640px){.cash-summary,.receivable-list{grid-template-columns:1fr}.cash-total{padding:15px}.cash-total>strong{font-size:27px}.receivable-list{margin-top:8px}.receivable-row{padding:10px 0}}
+/* The payoff workspace stays separate from the overview. */
+.heading-actions[hidden]{display:none}
+.payoff{--payoff-accent:var(--blue)}
+.payoff .panel{margin-bottom:20px}
+.payoff .grid-equal>.panel{margin-bottom:0}
+.payoff p{font-size:13px;line-height:1.85;color:var(--muted);margin:14px 0}
+.payoff p strong{color:var(--text);font-weight:550}
+.payoff small{display:block;font-size:11px;color:var(--muted);line-height:1.7}
+.payoff-intro{background:linear-gradient(115deg,color-mix(in srgb,var(--blue) 9%,var(--panel)),var(--panel));padding:30px}
+.payoff-intro h2{font-size:25px;font-weight:550;letter-spacing:-.6px;max-width:650px}
+.payoff-intro p{max-width:750px}
+.payoff-intro>small{margin-top:18px}
+.payoff-intro .text-link{background:none;border:0;font:inherit;color:var(--blue);cursor:pointer}
+.payoff-balance{display:block;font-size:29px;font-weight:550;letter-spacing:-.8px;margin:18px 0}
+.payoff-steps{list-style:none;counter-reset:step;display:grid;gap:25px;margin:10px 0 28px;padding:0}
+.payoff-steps>li{counter-increment:step;position:relative;padding-left:49px}
+.payoff-steps>li:before{content:counter(step,decimal-leading-zero);position:absolute;left:0;top:0;border:1px solid var(--line);border-radius:9px;padding:8px;color:var(--blue);font-size:12px}
+.payoff-steps>li>strong{font-size:14px;font-weight:550}
+.payoff-steps p{margin:7px 0}
+.payoff details{border-top:1px solid var(--line);margin-top:19px;padding-top:16px}
+.payoff summary{cursor:pointer;font-size:13px;line-height:1.6;color:var(--text);padding:6px 0}
+.payoff summary:focus-visible{outline:2px solid var(--blue);outline-offset:5px}
+.payoff-numbers{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:23px 0}
+.payoff-number{padding:19px;border:1px solid var(--line);border-radius:9px;background:var(--panel-alt)}
+.payoff-number>span{display:block;font-size:12px;color:var(--muted)}
+.payoff-number>strong{display:block;font-size:24px;letter-spacing:-.7px;font-weight:550;margin:12px 0}
+.payoff-waterfall{border-block:1px solid var(--line);padding:10px 0}
+.payoff-waterfall>div,.payoff-detail{display:flex;justify-content:space-between;gap:16px;padding:10px 0;font-size:12px;color:var(--muted)}
+.payoff-waterfall strong,.payoff-detail strong{font-weight:550;color:var(--text);white-space:nowrap}
+.payoff-remainder{border-top:1px solid var(--line);margin-top:5px}
+.payoff-actions{font-size:13px;line-height:1.85;color:var(--muted);padding-left:18px}
+.payoff-actions li{margin:10px 0}
+.payoff-scenarios{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.payoff .form-grid{margin-top:24px}
+.payoff .form-grid input{font-size:16px}
+.payoff #payoff-simulator{scroll-margin-top:25px}
+.payoff .table-scroll{margin:20px -24px 0}
+.payoff td:first-child{white-space:normal;min-width:190px;max-width:350px}
+@media(max-width:640px){.payoff-intro{padding:22px}.payoff-intro h2{font-size:23px}.payoff-numbers{grid-template-columns:1fr 1fr;gap:9px}.payoff-number{padding:13px}.payoff-number>strong{font-size:21px}.payoff .form-grid{grid-template-columns:1fr}.payoff .grid-equal{grid-template-columns:1fr}.payoff .table-scroll{margin-inline:-18px}.payoff-steps>li{padding-left:42px}.payoff-detail{flex-wrap:wrap}.payoff-number small{font-size:10px}}

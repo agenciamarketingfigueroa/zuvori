@@ -9,7 +9,7 @@ const publicRoot = new URL('../public/', import.meta.url);
 const protectedRoot = new URL('../protected/', import.meta.url);
 const clientsRoot = new URL('../private/clients/', import.meta.url);
 const publicFiles = new Set(['index.html', 'login.css', 'login.js', 'assets/symbol.svg', 'assets/wordmark.svg', 'apple-touch-icon.png', 'assets/icon-192.png', 'assets/icon-512.png', 'manifest.webmanifest']);
-const protectedFiles = new Set(['app.html', 'app.js', 'finance.js', 'insights.js', 'insights-view.js', 'style.css']);
+const protectedFiles = new Set(['app.html', 'app.js', 'finance.js', 'insights.js', 'insights-view.js', 'payoff.js', 'payoff-view.js', 'style.css']);
 const contentTypes = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json; charset=utf-8' };
 const sessionName = 'zuvori_session';
 const sessionDuration = 8 * 60 * 60 * 1000;
