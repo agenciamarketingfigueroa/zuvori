@@ -8,7 +8,7 @@ const headers = {
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY'
 };
-const publicAssets = new Set(['/index.html', '/login.js', '/login.css', '/assets/symbol.svg', '/assets/wordmark.svg', '/robots.txt']);
+const publicAssets = new Set(['/index.html', '/login.js', '/login.css', '/assets/symbol.svg', '/assets/wordmark.svg', '/apple-touch-icon.png', '/assets/icon-192.png', '/assets/icon-512.png', '/manifest.webmanifest', '/robots.txt']);
 const hexBytes = value => {
   if (typeof value !== 'string' || !/^(?:[a-f\d]{2}){32,}$/i.test(value)) throw Error('Chave inválida.');
   return Uint8Array.from(value.match(/../g), pair => Number.parseInt(pair, 16));

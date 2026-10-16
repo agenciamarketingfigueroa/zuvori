@@ -20,6 +20,13 @@ test('local preview protects app files and financial data with a server session'
   const request = (route, options = {}) => fetch(base + route, { redirect: 'manual', ...options });
   try {
     assert.equal((await request('/')).status, 200);
+    const manifest = await request('/manifest.webmanifest');
+    assert.equal(manifest.status, 200);
+    assert.match(manifest.headers.get('content-type'), /application\/manifest\+json/);
+    assert.equal((await manifest.json()).display, 'standalone');
+    const touchIcon = await request('/apple-touch-icon.png');
+    assert.equal(touchIcon.status, 200);
+    assert.match(touchIcon.headers.get('content-type'), /image\/png/);
     assert.equal((await request('/app.html')).status, 303);
     assert.equal((await request('/app.js')).status, 401);
     assert.equal((await request('/finance.js')).status, 401);

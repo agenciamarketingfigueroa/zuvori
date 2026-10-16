@@ -28,6 +28,10 @@ test('Worker keeps financial data behind a server-checked session and separates 
   }), env);
 
   assert.equal((await get('/')).status, 200);
+  assert.equal((await get('/manifest.webmanifest')).status, 200);
+  assert.equal((await get('/apple-touch-icon.png')).status, 200);
+  assert.equal((await get('/assets/icon-192.png')).status, 200);
+  assert.equal((await get('/assets/icon-512.png')).status, 200);
   assert.equal((await get('/app.html')).status, 303);
   assert.equal((await get('/app.js')).status, 401);
   assert.equal((await get('/auth/session')).status, 401);
