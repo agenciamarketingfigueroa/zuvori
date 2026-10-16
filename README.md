@@ -1,6 +1,6 @@
 # zuvori.
 
-Aplicativo financeiro pessoal em HTML, CSS e JavaScript. Identidade neutra, temas claro e escuro e gráficos locais sem dependências externas. Etapa atual: protótipo interno, sem publicação.
+Aplicativo financeiro pessoal em HTML, CSS e JavaScript. Identidade neutra, temas claro e escuro e gráficos locais sem dependências externas. A versão de consulta está publicada em [zuvori.com.br](https://zuvori.com.br/) com autenticação no Cloudflare Worker.
 
 ## Rodar localmente
 
@@ -59,13 +59,13 @@ Backups exportados levam o nome do cliente. A importação rejeita um backup ide
 
 ## Acesso remoto protegido
 
-O Worker com login da Zuvori e armazenamento privado no Cloudflare KV está preparado, mas ainda não foi implantado. A publicação e a troca do domínio dependem de configurar a conta Cloudflare, uma nova senha forte e revisar a cópia da análise. Consulte [docs/cloudflare-worker.md](docs/cloudflare-worker.md). Os dados enviados ao KV ficam fora do repositório; a versão remota é somente leitura.
+O Worker com login da Zuvori atende `zuvori.com.br` e `www.zuvori.com.br`. A cópia da análise do Felipe fica no Cloudflare KV e pode ser consultada após login em qualquer dispositivo. Os dados enviados ao KV ficam fora do repositório; a versão remota é somente leitura. A conta Delliz está vazia e sem credencial. Para atualizar a análise publicada, consulte [docs/cloudflare-worker.md](docs/cloudflare-worker.md).
 
 ## Dados financeiros
 
 `private/`, `tmp/`, os PDFs, backups e imagens de QA são locais e ignorados pelo Git. Cada credencial fica em `private/clients/<cliente>/auth.json` como hash com salt; usuários e senhas não estão no código. O build copia `public/` e `protected/`, sem dados financeiros ou credenciais. Não coloque documentos ou backups nessas pastas públicas do build.
 
-O login protege a prévia servida pelo servidor local. Os dados editados ainda são armazenados no `localStorage` do navegador sem criptografia e **não sincronizam entre dispositivos**; quem tem acesso ao computador, ao perfil do navegador ou aos arquivos locais pode lê-los fora do aplicativo. A proteção da futura hospedagem é descrita em [docs/cloudflare.md](docs/cloudflare.md). Ocultar valores só desfoca a interface.
+O login também protege a prévia servida pelo servidor local. Edições locais são armazenadas no `localStorage` do navegador sem criptografia e não atualizam automaticamente a cópia publicada no KV; quem tem acesso ao computador, ao perfil do navegador ou aos arquivos locais pode lê-las fora do aplicativo. A versão remota e o procedimento de atualização estão em [docs/cloudflare-worker.md](docs/cloudflare-worker.md). Ocultar valores só desfoca a interface.
 
 O extrator utilizado nesta primeira importação é específico aos modelos de fatura fornecidos. Precisa de Python com `pdfplumber`:
 
@@ -104,7 +104,7 @@ npm test
 npm run build
 ```
 
-Os testes cobrem centavos, projeções, virada de ano, validação de backups, autenticação local e bloqueio/validação de JWT na futura hospedagem. `dist/` contém apenas o aplicativo estático. Para Cloudflare Pages, mantenha também `functions/` na raiz do repositório para compilar o middleware de autenticação.
+Os testes cobrem centavos, projeções, virada de ano, validação de backups e autenticação. `dist/` contém apenas o aplicativo estático. O Worker em `worker/` aplica a proteção no domínio publicado; `wrangler.toml` registra os domínios e bindings necessários.
 
 ## Marca
 

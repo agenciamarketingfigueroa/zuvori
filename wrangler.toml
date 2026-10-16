@@ -1,6 +1,15 @@
 name = "zuvori-private"
 main = "worker/index.js"
 compatibility_date = "2026-10-15"
+preview_urls = false
+
+[[routes]]
+pattern = "zuvori.com.br"
+custom_domain = true
+
+[[routes]]
+pattern = "www.zuvori.com.br"
+custom_domain = true
 
 [assets]
 directory = "./dist"
