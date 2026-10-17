@@ -56,6 +56,21 @@ Backups exportados levam o nome do cliente. A importação rejeita um backup ide
 - Meta mensal, simulação de redução em categorias selecionadas e confirmação local de pagamento.
 - Exportação e importação JSON, exportação CSV dos filtros ativos, tema persistente e ocultação visual dos valores.
 - Layout responsivo, navegação por teclado, estados vazios e fontes de cada lançamento.
+- Seção independente **Plano de quitação**, com etapas para reduzir gastos, análise agregada da operação e simulador de duas dívidas. Os saldos deste plano não aparecem na visão geral.
+
+### Preparar e revisar o plano de quitação
+
+O campo opcional `debtPlan` fica na base privada de cada cliente. Clientes sem plano continuam vazios. Saldos desconhecidos permanecem `null`; cenários não são tratados como dívidas confirmadas. O simulador usa centavos inteiros, juros mensais constantes e pagamento ao fim do mês. Não inclui tarifas, novas compras, carências ou o limite legal do rotativo; serve para explorar hipóteses de renegociação, sem substituir o cronograma do contrato. As simulações não alteram dados nem persistem na consulta remota.
+
+Para analisar as exportações Hotmart e Meta no formato suportado, use Python com `openpyxl`:
+
+```sh
+python scripts/analyze-operation.py CLIENTE CAMINHO_HOTMART CAMINHO_META
+```
+
+O script confere cabeçalhos, duplicatas, papéis, moedas, períodos e conciliação. Preserva originais em `private/clients/CLIENTE/sources/` e salva agregados em `reports/operation-analysis.json`. O recorte de produtos é explícito no script e deve ser revisado para operações diferentes. BRL e USD não são somados; líquido da plataforma menos mídia não equivale a lucro final nem saldo disponível. Só agregados revisados devem ser incorporados a `debtPlan.operation` e enviados ao KV.
+
+No Go Live, **Plano de quitação → Carregar análise preparada** (ou **Atualizar análise local**) lê a base privada do cliente autenticado. A interface solicita confirmação e baixa um backup anterior antes de substituir os dados locais. Alterações feitas no navegador após a preparação precisam ser conciliadas; não há mesclagem automática. Na versão remota, a atualização depende de publicar o código e atualizar a cópia privada no KV.
 
 ## Acesso remoto protegido
 
